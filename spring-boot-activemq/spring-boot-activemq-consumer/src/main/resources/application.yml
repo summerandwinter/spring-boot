@@ -5,8 +5,17 @@ spring:
     broker-url: tcp://127.0.0.1:61616
     user: admin
     password: admin
-    in-memory: true
-    pool:
-      max-connections: 30
-      idle-timeout: 30s
-      enabled: true
+    in-memory: false
+  task:
+    execution:
+      pool:
+        allow-core-thread-timeout: true
+        core-size: 80
+        max-size:  200
+        queue-capacity: 400
+      thread-name-prefix: AsyncTaskExecutor-
+
+#    pool:
+#      max-connections: 100
+#      idle-timeout: 30s
+#      enabled: true

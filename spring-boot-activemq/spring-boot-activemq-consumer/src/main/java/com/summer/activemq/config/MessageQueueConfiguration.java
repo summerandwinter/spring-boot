@@ -20,7 +20,7 @@ import org.springframework.jms.core.JmsMessagingTemplate;
 public class MessageQueueConfiguration {
 
   @Value("${spring.activemq.user}")
-  private String userName;
+  private String user;
   @Value("${spring.activemq.password}")
   private String password;
   @Value("${spring.activemq.broker-url}")
@@ -36,7 +36,7 @@ public class MessageQueueConfiguration {
   }
   @Bean
   public ActiveMQConnectionFactory connectionFactory() {
-    return new ActiveMQConnectionFactory("admin", "admin", "tcp://localhost:61616");
+    return new ActiveMQConnectionFactory(user, password, brokerUrl);
   }
   @Bean
   public JmsListenerContainerFactory<?> jmsListenerContainerTopic(ActiveMQConnectionFactory connectionFactory) {
