@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
+ * Message queue producer.
  * @author yi.liu@bmsoft.com.cn
  * @date 2019/4/26
  */
@@ -18,14 +19,27 @@ import org.springframework.stereotype.Component;
 @EnableScheduling
 public class ProducerTask {
 
-  @Autowired
-  private JmsMessagingTemplate jmsMessagingTemplate;
-  @Autowired
-  private Topic topic;
-  @Autowired
-  private Queue queue;
-  private static int count= 0;
+  private final JmsMessagingTemplate jmsMessagingTemplate;
+  private final Topic topic;
+  private final Queue queue;
+  private int count = 0;
 
+  /**
+   * Inject beans in the construct method.
+   * @param topic Topic
+   * @param queue Queue
+   * @param jmsMessagingTemplate JmsMessagingTemplate
+   */
+  @Autowired
+  public ProducerTask(Topic topic, Queue queue, JmsMessagingTemplate jmsMessagingTemplate) {
+    this.topic = topic;
+    this.queue = queue;
+    this.jmsMessagingTemplate = jmsMessagingTemplate;
+  }
+
+  /**
+   * Send a message to activemq queue and topic per sec.
+   */
   @Scheduled(fixedDelay = 1000)
   public void send() {
     log.info("message send " + count);

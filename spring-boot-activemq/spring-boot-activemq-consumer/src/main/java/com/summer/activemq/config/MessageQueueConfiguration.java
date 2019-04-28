@@ -13,6 +13,7 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsMessagingTemplate;
 
 /**
+ * Configuration for message queue.
  * @author yi.liu@bmsoft.com.cn
  * @date 2019/4/26
  */
@@ -27,32 +28,49 @@ public class MessageQueueConfiguration {
   private String brokerUrl;
 
   @Bean
-  public Queue queue(){
+  public Queue queue() {
     return new ActiveMQQueue("summer.queue");
   }
+
   @Bean
-  public Topic topic(){
+  public Topic topic() {
     return new ActiveMQTopic("summer.topic");
   }
+
   @Bean
   public ActiveMQConnectionFactory connectionFactory() {
     return new ActiveMQConnectionFactory(user, password, brokerUrl);
   }
+
+  /**
+   * Config topic.
+   * @param connectionFactory ActiveMQConnectionFactory
+   * @return JmsListenerContainerFactory
+   */
   @Bean
-  public JmsListenerContainerFactory<?> jmsListenerContainerTopic(ActiveMQConnectionFactory connectionFactory) {
+  public JmsListenerContainerFactory<?> jmsListenerContainerTopic(
+      ActiveMQConnectionFactory connectionFactory) {
     DefaultJmsListenerContainerFactory bean = new DefaultJmsListenerContainerFactory();
     bean.setPubSubDomain(true);
     bean.setConnectionFactory(connectionFactory);
     return bean;
   }
+
+  /**
+   * Config queue.
+   * @param connectionFactory ActiveMQConnectionFactory
+   * @return JmsListenerContainerFactory
+   */
   @Bean
-  public JmsListenerContainerFactory<?> jmsListenerContainerQueue(ActiveMQConnectionFactory connectionFactory) {
+  public JmsListenerContainerFactory<?> jmsListenerContainerQueue(
+      ActiveMQConnectionFactory connectionFactory) {
     DefaultJmsListenerContainerFactory bean = new DefaultJmsListenerContainerFactory();
     bean.setConnectionFactory(connectionFactory);
     return bean;
   }
+
   @Bean
-  public JmsMessagingTemplate jmsMessagingTemplate(ActiveMQConnectionFactory connectionFactory){
+  public JmsMessagingTemplate jmsMessagingTemplate(ActiveMQConnectionFactory connectionFactory) {
     return new JmsMessagingTemplate(connectionFactory);
   }
 

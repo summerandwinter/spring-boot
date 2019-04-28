@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
+ * Configuration for async task execution pool.
  * @author yi.liu@bmsoft.com.cn
  * @date 2019/4/27
  */
@@ -24,6 +25,10 @@ public class AsyncConfiguration {
   @Value("${spring.task.execution.thread-name-prefix}")
   private String threadNamePrefix;
 
+  /**
+   * Create async task executor bean.
+   * @return ThreadPoolTaskExecutor
+   */
   @Bean
   public ThreadPoolTaskExecutor asyncTaskExecutor() {
     ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();

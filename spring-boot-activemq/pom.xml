@@ -5,14 +5,14 @@
   <parent>
     <artifactId>spring-boot</artifactId>
     <groupId>com.summer</groupId>
-    <version>${project.version}</version>
+    <version>1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>spring-boot-activemq</artifactId>
   <packaging>pom</packaging>
   <name>spring-boot-activemq</name>
-  <description>Demo project for Spring Boot</description>
+  <description>Demo project for Spring Boot activemq</description>
   <modules>
     <module>spring-boot-activemq-consumer</module>
     <module>spring-boot-activemq-producer</module>
