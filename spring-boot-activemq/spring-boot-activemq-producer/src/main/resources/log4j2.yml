@@ -10,9 +10,9 @@ Configuration:
       - name: log.level.action
         value: INFO
       - name: log.path
-        value: /data/log/spring-boot
+        value: /Users/summer/data/log/spring-boot
       - name: project.name
-        value: spring-boot-activemq
+        value: spring-boot-activemq-producer
       - name: log.prefix
         value: summer
 

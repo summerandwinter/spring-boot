@@ -1,6 +1,33 @@
+#  日志打印级别 ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
+#  ALL  :最低等级的，用于打开所有日志记录.
+#  TRACE:是追踪，就是程序推进以下，你就可以写个trace输出，所以trace应该会特别多，不过没关系，我们可以设置最低日志级别不让他输出.
+#  DEBUG:指出细粒度信息事件对调试应用程序是非常有帮助的.
+#  INFO :消息在粗粒度级别上突出强调应用程序的运行过程.
+#  WARN :输出警告及warn以下级别的日志.
+#  ERROR:输出错误信息日志.
+#  FATAL:输出每个严重的错误事件将会导致应用程序的退出的日志.
+#  OFF  :最高等级的，用于关闭所有日志记录
+#
+#  PatternLayout
+#  %d{yyyy-MM-dd HH:mm:ss,SSS} : 日志生成时间
+#  %p : 日志输出格式（e.g. INFO,DEBUG）
+#  %c : logger的名称（LogFactory.getLog 方法指定的类名）
+#  %m : 日志内容，即 logger.info("message")
+#  %n : 换行符
+#  %l : location information
+#  %C : 日志输出所在类路径（包含包名和类名） location information
+#  %F : 日志输出所在类名 location information
+#  %L : 日志输出所在行数 location information
+#  %M : 日志输出所在方法名 location information
+#  hostName : 本地机器名
+#  hostAddress : 本地ip地址
+#  彩色日志配置
+#  在2.10版本以后，Log4j2默认关闭了Jansi（一个支持输出ANSI颜色的类库）
+#  VM options 添加
+#  -Dlog4j.skipJansi=false
 Configuration:
-  status: off
-
+  status: ERROR # log4j 本身的日志打印级别
+  monitorInterval: 30 # 用于指定 log4j 自动重新配置的监测间隔时间，单位是s,最小是 5s.
   Properties: # 定义全局变量
     Property: # 缺省配置（用于开发环境）。其他环境需要在VM参数中指定，如下：
       #测试：-Dlog.level.console=warn -Dlog.level.xjj=trace
@@ -10,11 +37,17 @@ Configuration:
       - name: log.level.action
         value: INFO
       - name: log.path
-        value: /data/log/spring-boot
+        value: /Users/summer/data/log/spring-boot
       - name: project.name
-        value: spring-boot-activemq
+        value: spring-boot-activemq-consumer
       - name: log.prefix
         value: summer
+      - name: log.rollingFile.patternLayout
+        value: "[%d{yyyy-MM-dd HH:mm:ss,SSS}] %5p ${log.prefix} %l - %m%n"
+      - name: log.console.patternLayout
+        value: "[%d{yyyy-MM-dd HH:mm:ss,SSS}] %highlight{%5p} [%style{%-35.35t %3.3tid}{yellow}] [%style{%-70.70l}{Bright,Cyan}] - %m%n"
+      - name: log.filePattern
+        value: "${log.path}/$${date:yyyy-MM-dd}/${project.name}-%d{yyyy-MM-dd}-%i.log.gz"
 
   Appenders:
     Console:  #输出到控制台
@@ -25,14 +58,14 @@ Configuration:
         onMatch: ACCEPT
         onMismatch: DENY
       PatternLayout:
-        pattern: "[%d{yyyy-MM-dd HH:mm:ss,SSS}] ${log.prefix} :%4p %t (%F:%L) - %m%n"
+        pattern: ${log.console.patternLayout}
     RollingFile: # 输出到文件，超过128MB归档
       - name: ROLLING_FILE
         ignoreExceptions: false
         fileName: ${log.path}/${project.name}-action.log
-        filePattern: "${log.path}/$${date:yyyy-MM-dd}/${project.name}-%d{yyyy-MM-dd}-%i.log.gz"
+        filePattern: ${log.filePattern}
         PatternLayout:
-          pattern: "[%d{yyyy-MM-dd HH:mm:ss,SSS}] ${log.prefix} :%4p %t (%F:%L) - %m%n"
+          pattern: ${log.rollingFile.patternLayout}
         Policies:
           TimeBasedTriggeringPolicy:
             interval: 1
