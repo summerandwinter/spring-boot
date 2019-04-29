@@ -37,7 +37,7 @@ public class ConsumerService {
   public void receiveQueue(String text) {
     int activeCount  = asyncTaskExecutor.getActiveCount();
     int poolSize = asyncTaskExecutor.getPoolSize();
-    log.info("activeCount: " + activeCount + ", poolSize：" + poolSize);
+    //log.info("activeCount: " + activeCount + ", poolSize：" + poolSize);
     asyncService.receive(text);
   }
 

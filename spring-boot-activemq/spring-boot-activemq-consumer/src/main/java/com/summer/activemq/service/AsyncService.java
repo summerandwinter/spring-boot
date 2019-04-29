@@ -19,13 +19,17 @@ public class AsyncService {
    */
   @Async
   public void receive(String message) {
+    log.trace("Queue consumer start : " + message);
+    log.debug("Queue consumer start : " + message);
     log.info("Queue consumer start : " + message);
+    log.warn("Queue consumer start : " + message);
+    log.error("Queue consumer start : " + message);
     try {
       Thread.sleep(5000);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-    log.info("Queue consumer end   : " + message);
+    //log.info("Queue consumer end   : " + message);
   }
 
 }
