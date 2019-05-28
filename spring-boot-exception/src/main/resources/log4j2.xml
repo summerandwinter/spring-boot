@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ERROR" monitorInterval="30">
+  <Properties>
+    <!-- 配置日志文件输出目录 ${sys:user.home} -->
+    <!--共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.
+        All:最低等级的，用于打开所有日志记录.
+        Trace:是追踪，就是程序推进以下，你就可以写个trace输出，所以trace应该会特别多，不过没关系，我们可以设置最低日志级别不让他输出.
+        Debug:指出细粒度信息事件对调试应用程序是非常有帮助的.
+        Info:消息在粗粒度级别上突出强调应用程序的运行过程.
+        Warn:输出警告及warn以下级别的日志.
+        Error:输出错误信息日志.
+        Fatal:输出每个严重的错误事件将会导致应用程序的退出的日志.
+        OFF:最高等级的，用于关闭所有日志记录-->
+    <Property name="log.level.console">INFO</Property>
+    <Property name="log.level.action">INFO</Property>
+    <Property name="log.path">/Users/summer/data/log/spring-boot</Property>
+    <Property name="project.name">spring-boot-activemq-consumer</Property>
+    <Property name="log.prefix">summer</Property>
+    <Property name="log.file.patternLayout">[%d{yyyy-MM-dd HH:mm:ss,SSS}] %5p ${log.prefix} %l - %m%n</Property>
+    <Property name="log.rollingFile.patternLayout">[%d{yyyy-MM-dd HH:mm:ss,SSS}] %5p ${log.prefix} %l - %m%n</Property>
+    <Property name="log.console.patternLayout">[%d{yyyy-MM-dd HH:mm:ss,SSS}] %highlight{%5p} [%style{%-35.35t %3.3tid}{yellow}] [%style{%-70.70l}{Bright,Cyan}] [%X{traceId}] - %m%n</Property>
+    <Property name="log.filePattern">${log.path}/$${date:yyyy-MM-dd}/${project.name}-%d{yyyy-MM-dd}-%i.log.gz</Property>
+  </Properties>
+
+  <Appenders>
+    <!--这个输出控制台的配置 -->
+    <Console name="CONSOLE" target="SYSTEM_OUT">
+      <ThresholdFilter level="${sys:log.level.console}" onMatch="ACCEPT"
+        onMismatch="DENY"/>
+      <PatternLayout
+        pattern="${log.console.patternLayout}"/>
+    </Console>
+
+    <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用 -->
+    <!--append为TRUE表示消息增加到指定文件中，false表示消息覆盖指定的文件内容，默认值是true -->
+    <File name="FILE" fileName="${log.path}/${project.name}-action.log" append="false">
+      <PatternLayout
+        pattern="${log.file.patternLayout}"/>
+    </File>
+    <RollingFile name="ROLLING_FILE_DEBUG" fileName="${log.path}/${project.name}-debug.log"
+      filePattern="${log.path}/$${date:yyyy-MM-dd}/${project.name}-debug-%d{yyyy-MM-dd}-%i.log.gz">
+      <Filters>
+        <ThresholdFilter level="debug"/>
+        <ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL"/>
+      </Filters>
+      <PatternLayout
+        pattern="${log.rollingFile.patternLayout}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        <SizeBasedTriggeringPolicy size="128 MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="200"/>
+    </RollingFile>
+    <RollingFile name="ROLLING_FILE_INFO" fileName="${log.path}/${project.name}-info.log"
+      filePattern="${log.path}/$${date:yyyy-MM-dd}/${project.name}-info-%d{yyyy-MM-dd}-%i.log.gz">
+      <Filters>
+        <ThresholdFilter level="INFO"/>
+        <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+      </Filters>
+      <PatternLayout
+        pattern="${log.rollingFile.patternLayout}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        <SizeBasedTriggeringPolicy size="128 MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="200"/>
+    </RollingFile>
+    <RollingFile name="ROLLING_FILE_WARN" fileName="${log.path}/${project.name}-warn.log"
+      filePattern="${log.path}/$${date:yyyy-MM-dd}/${project.name}-warn-%d{yyyy-MM-dd}-%i.log.gz">
+      <Filters>
+        <ThresholdFilter level="WARN"/>
+        <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+      </Filters>
+      <PatternLayout
+        pattern="${log.rollingFile.patternLayout}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        <SizeBasedTriggeringPolicy size="128 MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="200"/>
+    </RollingFile>
+    <RollingFile name="ROLLING_FILE_ERROR" fileName="${log.path}/${project.name}-error.log"
+      filePattern="${log.path}/$${date:yyyy-MM-dd}/${project.name}-error-%d{yyyy-MM-dd}-%i.log.gz">
+      <Filters>
+        <ThresholdFilter level="ERROR"/>
+      </Filters>
+      <PatternLayout
+        pattern="${log.rollingFile.patternLayout}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        <SizeBasedTriggeringPolicy size="128 MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="200"/>
+    </RollingFile>
+  </Appenders>
+  <!--然后定义 loggers，只有定义了loggers并引入的appender，appender才会生效-->
+  <!-- 指定项目的根日志，如果没有单独指定 Logger，那么默认使用该 Root 日志输出 -->
+  <Loggers>
+    <!-- 配置日志的根节点，根节点日志级别为 WARN 时只有 WARN 及以上日志会被打印-->
+    <Root level="INFO">
+      <!-- Root 的子节点，用来指定该日志输出到哪个 Appender。-->
+      <AppenderRef ref="CONSOLE"/>
+      <AppenderRef ref="FILE"/>
+      <AppenderRef ref="ROLLING_FILE_DEBUG"/>
+      <AppenderRef ref="ROLLING_FILE_INFO"/>
+      <AppenderRef ref="ROLLING_FILE_WARN"/>
+      <AppenderRef ref="ROLLING_FILE_ERROR"/>
+    </Root>
+    <!-- 个性化配置第三方日志系统 -->
+    <!-- 用来单独指定日志的形式。 -->
+    <!-- org.springframework 输出 WARN 及以上级别日志 -->
+    <Logger name="org.springframework" level="WARN"/>
+    <!-- org.mybatis 输出 DEBUG 及以上级别日志，方便调试 SQL -->
+    <Logger name="org.mybatis" level="DEBUG"/>
+    <!-- org.springframework.boot 输出 INFO 及以上级别日志 -->
+    <Logger name="org.springframework.boot" level="INFO"/>
+  </Loggers>
+</Configuration>

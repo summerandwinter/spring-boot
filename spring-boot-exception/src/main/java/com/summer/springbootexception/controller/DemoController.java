@@ -56,9 +56,9 @@ public class DemoController {
 
   @RequestMapping("data")
   @ResponseBody
-  public ApiResponse data() {
+  public ApiResponse data(String id) {
     Map<String, Object> data = new HashMap<>(2);
-    data.put("id", 100);
+    data.put("id", id);
     data.put("name", "summer");
     return new ApiResponse<>(data);
   }
