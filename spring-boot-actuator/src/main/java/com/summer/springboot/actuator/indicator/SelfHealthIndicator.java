@@ -5,6 +5,7 @@ import org.springframework.boot.actuate.health.Health.Builder;
 import org.springframework.stereotype.Component;
 
 /**
+ * Another custom health indicator.
  * @author yi.liu@bmsoft.com.cn
  * @date 2019/5/28
  */
