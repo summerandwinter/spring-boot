@@ -1,5 +1,5 @@
 server:
-  port: 8002
+  port: 18002
 spring:
   activemq:
     broker-url: tcp://127.0.0.1:61616
