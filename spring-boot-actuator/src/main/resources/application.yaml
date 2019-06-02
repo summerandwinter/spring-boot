@@ -1,5 +1,6 @@
 # INFO ENDPOINT CONFIGURATION
-
+server:
+  port: 18004
 info:
   app:
     name: @project.name@
