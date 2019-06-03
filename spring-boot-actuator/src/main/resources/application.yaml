@@ -13,12 +13,14 @@ info:
 spring:
   application:
     name: actuator1
-  security:
-    user:
-      name: actuator
-      password: actuator
-      roles: ACTUATOR_ADMIN
+#  security:
+#    user:
+#      name: actuator
+#      password: actuator
+#      roles: ACTUATOR_ADMIN
 management:
+  server:
+    port: 19004
   metrics:
     tags:
       application: ${spring.application.name}
@@ -26,16 +28,6 @@ management:
     export:
       jmx:
         domain: com.summer.metrics
-      newrelic:
-        account-id: 2357933
-        api-key: 6fa32be9f12b14a3a9a60b699599dec8
-        step: 1m
-        enabled: false
-      kairos:
-        enabled: false
-        step: 1m
-        user-name: ly1989124423@163.com
-        password: qq1989124423
   health:
     status:
       order: FATAL, DOWN, OUT_OF_SERVICE, UNKNOWN, UP

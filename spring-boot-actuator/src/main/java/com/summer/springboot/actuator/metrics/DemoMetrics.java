@@ -19,6 +19,11 @@ public class DemoMetrics  implements MeterBinder {
         .description("demo of custom metrics")
         .baseUnit("beans")
         .register(meterRegistry);
+    Gauge.builder("demo.gauge", count, AtomicInteger::get)
+        .tags("host", "localhost1")
+        .description("demo of custom metrics")
+        .baseUnit("beans")
+        .register(meterRegistry);
     Counter counter = Counter.builder("demo.counter")
         .baseUnit("beans")
         .description("a description of what this counter does")
