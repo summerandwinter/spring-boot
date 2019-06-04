@@ -22,7 +22,7 @@ public class OrderService {
   private MessageService messageService;
 
   public Boolean createOrder(Order order) {
-    //模拟下单
+    // 模拟下单
     try {
       int ms = R.nextInt(50) + 50;
       TimeUnit.MILLISECONDS.sleep(ms);
@@ -30,9 +30,9 @@ public class OrderService {
     } catch (Exception e) {
       //no-op
     }
-    //记录下单总数
+    // 记录下单总数
     Metrics.counter("order.count").increment();
-    //发送消息
+    // 发送消息
     Message message = new Message();
     message.setContent("模拟短信...");
     message.setOrderId(order.getOrderId());

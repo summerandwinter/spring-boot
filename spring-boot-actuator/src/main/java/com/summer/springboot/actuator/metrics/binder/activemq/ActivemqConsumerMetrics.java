@@ -43,15 +43,20 @@ public class ActivemqConsumerMetrics implements MeterBinder {
     for (ObjectName queueName : mBean.getQueues()) {
       QueueViewMBean queueMBean = MBeanServerInvocationHandler
           .newProxyInstance(connection, queueName, QueueViewMBean.class, true);
-      Gauge.builder("activemq.queue.size", queueMBean::getQueueSize)
+      Gauge.builder("activemq.queue", queueMBean::getQueueSize)
           .tags("name", queueMBean.getName())
           .description("Number of messages on this destination, including any that have been dispatched but not acknowledged")
           .baseUnit("count")
           .register(meterRegistry);
-      Gauge.builder("activemq.dequeue.count", queueMBean::getDequeueCount)
+      Gauge.builder("activemq.dequeue", queueMBean::getDequeueCount)
           .tags("name", queueMBean.getName())
           .description("Number of messages that has been acknowledged (and removed) from the destination.")
-          .baseUnit("count")
+          .baseUnit("total")
+          .register(meterRegistry);
+      Gauge.builder("activemq.enqueue", queueMBean::getEnqueueCount)
+          .tags("name", queueMBean.getName())
+          .description("Number of messages that have been sent to the destination.")
+          .baseUnit("total")
           .register(meterRegistry);
     }
   }
