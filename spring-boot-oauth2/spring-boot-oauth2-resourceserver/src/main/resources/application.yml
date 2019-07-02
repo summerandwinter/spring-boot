@@ -1,0 +1,8 @@
+server:
+  port: 18008
+
+security:
+  oauth2:
+    resource:
+      jwt:
+        key-value: test-secret

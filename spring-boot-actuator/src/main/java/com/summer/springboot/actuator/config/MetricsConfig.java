@@ -1,7 +1,6 @@
 package com.summer.springboot.actuator.config;
 
 import com.summer.springboot.actuator.metrics.DemoMetrics;
-import com.summer.springboot.actuator.metrics.binder.activemq.ActivemqConsumerMetrics;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,8 +16,8 @@ public class MetricsConfig {
     return new DemoMetrics();
   }
 
-  @Bean
-  public ActivemqConsumerMetrics activemqConsumerMetrics() {
-    return  new ActivemqConsumerMetrics();
-  }
+//  @Bean
+//  public ActivemqConsumerMetrics activemqConsumerMetrics() {
+//    return  new ActivemqConsumerMetrics();
+//  }
 }

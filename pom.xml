@@ -26,6 +26,10 @@
     <module>spring-boot-activemq</module>
     <module>spring-boot-actuator</module>
     <module>spring-boot-exception</module>
+    <module>springbootoauth2</module>
+    <module>spring-boot-oauth2</module>
+    <module>spring-boot-oauth2</module>
+    <module>spring-boot-oauth2</module>
   </modules>
   <dependencies>
     <dependency>

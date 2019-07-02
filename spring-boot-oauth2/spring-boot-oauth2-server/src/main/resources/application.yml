@@ -1,0 +1,9 @@
+server:
+  port: 18009
+
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          oauth2: debug

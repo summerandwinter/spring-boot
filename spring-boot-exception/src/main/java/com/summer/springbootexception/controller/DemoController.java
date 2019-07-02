@@ -4,16 +4,16 @@ import com.summer.springbootexception.common.ApiResponse;
 import com.summer.springbootexception.enums.ApiResponseStatus;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author yi.liu@bmsoft.com.cn
  * @date 2019/5/23
  */
-@RestController
+@Controller
 @RequestMapping("/demo")
 public class DemoController {
 
@@ -25,6 +25,8 @@ public class DemoController {
     data.put("msg", "This is a demo!");
     return data;
   }
+
+
 
   @RequestMapping("500")
   @ResponseBody

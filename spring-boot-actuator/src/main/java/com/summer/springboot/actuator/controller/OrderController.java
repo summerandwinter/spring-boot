@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * @author yi.liu@bmsoft.com.cn
@@ -16,10 +17,29 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/demo")
 public class OrderController {
+
+  private final OrderService orderService;
+
   @Autowired
-  private OrderService orderService;
+  public OrderController(OrderService orderService) {
+    this.orderService = orderService;
+  }
+
+  @RequestMapping("/redirect")
+  public RedirectView redirect() {
+    RedirectView redirectTarget = new RedirectView();
+    redirectTarget.setUrl("http://192.168.0.170:18004/demo/anotherRedirect");
+    return redirectTarget;
+  }
+
+  @RequestMapping("/anotherRedirect")
+  public RedirectView anotherRedirect() {
+    RedirectView redirectTarget = new RedirectView();
+    redirectTarget.setUrl("http://www.baidu.com?a=b");
+    return redirectTarget;
+  }
 
   @PostMapping(value = "createOrder")
   @ResponseBody
