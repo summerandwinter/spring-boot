@@ -1,14 +1,16 @@
 package io.summer.springboot.oauth2.authorization.config;
 
-import org.springframework.context.annotation.Bean;
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * @author summerandwinter
@@ -18,25 +20,18 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 
+  private final AuthenticationManager authenticationManager;
+  private final RedisConnectionFactory redisConnectionFactory;
+  private final DataSource dataSource;
 
-  /**
-   * 对Jwt签名时，增加一个密钥
-   * JwtAccessTokenConverter：对Jwt来进行编码以及解码的类
-   */
-  @Bean
-  public JwtAccessTokenConverter accessTokenConverter() {
-    JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-    converter.setSigningKey("test-secret");
-    return converter;
+  @Autowired
+  public AuthorizationConfig(AuthenticationManager authenticationManager,
+      RedisConnectionFactory redisConnectionFactory, DataSource dataSource) {
+    this.authenticationManager = authenticationManager;
+    this.redisConnectionFactory = redisConnectionFactory;
+    this.dataSource = dataSource;
   }
 
-  /**
-   * 设置token 由Jwt产生，不使用默认的透明令牌
-   */
-  @Bean
-  public JwtTokenStore jwtTokenStore() {
-    return new JwtTokenStore(accessTokenConverter());
-  }
   @Override
   public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
     oauthServer
@@ -45,21 +40,15 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
         .allowFormAuthenticationForClients();
   }
   @Override
-  public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-    endpoints
-        .tokenStore(jwtTokenStore())
-        .accessTokenConverter(accessTokenConverter());
+  public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    // 配置客户端, 用于client认证
+    clients.jdbc(dataSource);
   }
 
   @Override
-  public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-    clients.inMemory()
-        .withClient("appId")
-        .secret("appSecret")
-        .scopes("read")
-        .authorities("client")
-        .authorizedGrantTypes("client_credentials");
+  public void configure(AuthorizationServerEndpointsConfigurer endpoints)  {
+    endpoints.tokenStore(new RedisTokenStore(redisConnectionFactory))
+        .authenticationManager(authenticationManager);
   }
-
 
 }
