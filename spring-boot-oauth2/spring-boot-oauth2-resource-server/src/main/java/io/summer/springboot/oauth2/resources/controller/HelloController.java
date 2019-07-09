@@ -19,7 +19,6 @@ public class HelloController {
     if (authentication instanceof OAuth2Authentication) {
       OAuth2Authentication oauth = (OAuth2Authentication) authentication;
       name = oauth.getPrincipal().toString();
-      System.out.println(oauth.getPrincipal().toString());
     }
     return "hi , " + name;
   }
