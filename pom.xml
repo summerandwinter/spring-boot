@@ -20,16 +20,16 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.version>1.0.0</project.version>
     <lombok.version>1.16.22</lombok.version>
   </properties>
   <modules>
     <module>spring-boot-activemq</module>
     <module>spring-boot-actuator</module>
     <module>spring-boot-exception</module>
-    <module>springbootoauth2</module>
     <module>spring-boot-oauth2</module>
-    <module>spring-boot-oauth2</module>
-    <module>spring-boot-oauth2</module>
+    <module>spring-boot-rabbitmq</module>
+    <module>spring-boot-common</module>
   </modules>
   <dependencies>
     <dependency>
@@ -74,6 +74,16 @@
       <version>${lombok.version}</version>
     </dependency>
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.summer</groupId>
+        <artifactId>spring-boot-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <build>
     <plugins>
       <plugin>
