@@ -23,9 +23,11 @@ public class ProducerTask {
   }
 
   @Scheduled(fixedDelay = 1000)
-  public void send() {
-    MessageVO messageVO = new MessageVO("hello rabbit");
-    rabbitTemplate.convertAndSend(MessageQueue.RABBIT_MQ_QUEUE_NAME, messageVO);
+    public void send() {
+      MessageVO message = new MessageVO("message");
+      rabbitTemplate.convertAndSend(MessageQueue.RABBIT_MQ_TOPIC_EXCHANGE_NAME, "topic.message", message);
+      MessageVO log = new MessageVO("log");
+      rabbitTemplate.convertAndSend(MessageQueue.RABBIT_MQ_TOPIC_EXCHANGE_NAME, "topic.log", log);
 
   }
 
